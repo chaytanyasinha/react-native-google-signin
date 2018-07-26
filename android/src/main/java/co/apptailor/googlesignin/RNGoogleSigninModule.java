@@ -34,6 +34,9 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import host.exp.exponent.ActivityResultListener;
+import host.exp.expoview.Exponent;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,12 +61,12 @@ public class RNGoogleSigninModule extends ReactContextBaseJavaModule {
 
     public RNGoogleSigninModule(final ReactApplicationContext reactContext) {
         super(reactContext);
-        reactContext.addActivityEventListener(new RNGoogleSigninActivityEventListener());
+        Exponent.getInstance().addActivityResultListener(new RNGoogleSigninActivityEventListener());
     }
 
-    private class RNGoogleSigninActivityEventListener extends BaseActivityEventListener {
+    private class RNGoogleSigninActivityEventListener implements ActivityResultListener {
         @Override
-        public void onActivityResult(Activity activity, final int requestCode, final int resultCode, final Intent intent) {
+        public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
             if (requestCode == RNGoogleSigninModule.RC_SIGN_IN) {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
                 handleSignInResult(result);
